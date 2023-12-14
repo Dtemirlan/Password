@@ -4,6 +4,7 @@ interface PasswordState {
     input: string;
     isCorrect: boolean;
     message: string;
+    isIncorrectInput?: boolean;
 }
 
 const initialState: PasswordState = {

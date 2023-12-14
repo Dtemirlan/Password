@@ -1,11 +1,11 @@
-// src/components/PasswordInput.tsx
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setInput, clearInput, setCorrect, setMessage, selectPassword } from '../features/passwordSlice';
+import './PasswordInput.css';
 
 const PasswordInput: React.FC = () => {
     const dispatch = useDispatch();
-    const { input, isCorrect, message } = useSelector(selectPassword);
+    const { input, isCorrect, message, isIncorrectInput } = useSelector(selectPassword);
 
     const handleButtonClick = (value: string) => {
         if (value === '<') {
@@ -23,12 +23,20 @@ const PasswordInput: React.FC = () => {
         }
     };
 
-    const inputClass = isCorrect ? 'input-display' : 'input-display incorrect';
+    const digitClass = isIncorrectInput ? 'digit incorrect' : 'digit correct';
 
     return (
         <div className="password-container">
             <div className="input-container">
-                <input className={inputClass} type="text" value={input} readOnly />
+                <div className="digits-container">
+                    {input.split('').map((digit, index) => (
+                        <span key={index} className={digitClass}>
+              {digit}
+            </span>
+                    ))}
+                </div>
+                <div className="invalid-feedback">Incorrect input</div>
+                <div className="valid-feedback">Correct input</div>
             </div>
             <div className="button-container">
                 {['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '<', 'E'].map((button) => (
@@ -37,7 +45,7 @@ const PasswordInput: React.FC = () => {
                     </button>
                 ))}
             </div>
-            <div style={{ color: isCorrect ? 'green' : 'red' }}>{message}</div>
+            <div className={`message ${isCorrect ? 'text-success' : 'text-danger'}`}>{message}</div>
         </div>
     );
 };
